@@ -25,7 +25,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-Pet = create_classes(db)
+# Pet = create_classes(db)
 
 # create route that renders index.html template
 @app.route("/")
@@ -37,12 +37,12 @@ def home():
 @app.route("/send", methods=["GET", "POST"])
 def send():
     if request.method == "POST":
-        name = request.form["petName"]
-        lat = request.form["petLat"]
-        lon = request.form["petLon"]
+       # name = request.form["petName"]
+       # lat = request.form["petLat"]
+       # lon = request.form["petLon"]
 
-        pet = Pet(name=name, lat=lat, lon=lon)
-        db.session.add(pet)
+       # pet = Pet(name=name, lat=lat, lon=lon)
+       # db.session.add(pet)
         db.session.commit()
         return redirect("/", code=302)
 
