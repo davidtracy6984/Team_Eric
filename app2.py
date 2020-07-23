@@ -18,17 +18,17 @@ Base = automap_base()
 # reflect the tables
 Base.prepare(engine, reflect=True)
 Consumption = Base.classes.consumption
-#Generation = Base.classes.generation
-#Emissions = Base.classes.emissions
+Generation = Base.classes.generation
+Emissions = Base.classes.emissions
 
-app = Flask(__name__)
+app2 = Flask(__name__)
 
-@app.route("/")
+@app2.route("/")
 def consumption():
     session = Session(engine)
 
-    con_query = session.query(Consumption.Year,Consumption.State,Consumption.TypeOfProducer,Consumption.EnergySource,Consumption.ConsumptionOfElectricty)
-
+    con_query = session.query(Consumption.Year,Consumption.State,Consumption.TypeOfProducer,Consumption.EnergySource,Consumption.UseOfElectricity).all()
+    #con_query = session.query(Consumption).all()
     session.close()
 
     con_lst = []
@@ -37,9 +37,26 @@ def consumption():
         "State":result.State,
         "Producer":result.TypeOfProducer,
         "Source":result.EnergySource,
-        "Consumption":result.ConsumptionOfElectricity})
+        "Consumption":result.UseOfElectricity})
 
     return jsonify(con_lst)
+
+def generation():
+    session = Session(engine)
+
+    gen_query = session.query(Generation.Year,Generation.State,Generation.TypeOfProducer,Generation.EnergySource,Generation.Generated).all()
+    #con_query = session.query(Consumption).all()
+    session.close()
+
+    gen_lst = []
+    for result in gen_query:
+        gen_lst.append({"Year":result.Year,
+        "State":result.State,
+        "Producer":result.TypeOfProducer,
+        "Source":result.EnergySource,
+        "Generated":result.Generated})
+
+    return jsonify(gen_lst)
 
 
 if __name__ == "__main__":
