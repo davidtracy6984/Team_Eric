@@ -1,34 +1,12 @@
-function buildPlot() {
-  /* data route */
-  const url = "/api/pals";
-  d3.json(url).then(function(response) {
+d3.json('/consumption').then(function(all_data) {
+    // console.log(all_data);
+graph_data = []
 
-    console.log(response);
+for (i = 0; i< all_data.length; i++){
 
-    const data = response;
-
-    const layout = {
-      scope: "usa",
-      title: "Pet Pals",
-      showlegend: false,
-      height: 600,
-            // width: 980,
-      geo: {
-        scope: "usa",
-        projection: {
-          type: "albers usa"
-        },
-        showland: true,
-        landcolor: "rgb(217, 217, 217)",
-        subunitwidth: 1,
-        countrywidth: 1,
-        subunitcolor: "rgb(255,255,255)",
-        countrycolor: "rgb(255,255,255)"
-      }
-    };
-
-    Plotly.newPlot("plot", data, layout);
-  });
+    if (all_data[i].State=="US-TOTALS"){
+        graph_data.push (all_data[i]);   
+    }
 }
-
-buildPlot();
+console.log(graph_data);
+});

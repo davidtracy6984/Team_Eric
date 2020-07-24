@@ -5,7 +5,7 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 
 
 #################################################
@@ -22,8 +22,14 @@ Generation = Base.classes.generation
 Emissions = Base.classes.emissions
 
 app2 = Flask(__name__)
-
 @app2.route("/")
+
+def index():
+    """Return the homepage."""
+    return render_template("index.html")
+
+@app2.route("/consumption")
+
 
 def consumption():
     session = Session(engine)
@@ -68,44 +74,34 @@ def consumption():
 #     return jsonify(gen_lst)
 
 
-def emissions():
-    session = Session(engine)
+# def emissions():
+#     session = Session(engine)
 
-    emm_query = session.query(
-        Emissions.Year,
-        Emissions.State,
-        Emissions.TypeOfProducer,
-        Emissions.EnergySource,
-        Emissions.C02,
-        Emissions.S02,
-        Emissions.N0x)
+#     emm_query = session.query(
+#         Emissions.Year,
+#         Emissions.State,
+#         Emissions.TypeOfProducer,
+#         Emissions.EnergySource,
+#         Emissions.C02,
+#         Emissions.S02,
+#         Emissions.N0x)
     
-    session.close()
+#     session.close()
 
-    emm_lst = []
-    for year,state,typeofproducer,energysource,c02,s02,n0x in emm_query:
-        emm_dict = {}
-        emm_dict["Year"] = str(year)
-        emm_dict["State"] = state
-        emm_dict["TypeOfProducer"] = typeofproducer
-        emm_dict["EnergySource"] = energysource
-        emm_dict["C02"] = c02
-        emm_dict["S02"] = s02
-        emm_dict["N0x"] = n0x
-        emm_lst.append(emm_dict)
-
-
-    return jsonify(emm_lst)
+#     emm_lst = []
+#     for year,state,typeofproducer,energysource,c02,s02,n0x in emm_query:
+#         emm_dict = {}
+#         emm_dict["Year"] = str(year)
+#         emm_dict["State"] = state
+#         emm_dict["TypeOfProducer"] = typeofproducer
+#         emm_dict["EnergySource"] = energysource
+#         emm_dict["C02"] = c02
+#         emm_dict["S02"] = s02
+#         emm_dict["N0x"] = n0x
+#         emm_lst.append(emm_dict)
 
 
-
-
-
-
-
-
-
-
+#     return jsonify(emm_lst)
 
 
 
