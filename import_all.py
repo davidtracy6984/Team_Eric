@@ -1,6 +1,6 @@
 # """ import sqlite3
-# import json
-# from flask import Flask
+import json
+from flask import Flask
 
 # def get_tbl(tbl_name):
 #     database = r"db.sqlite"
