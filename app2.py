@@ -55,6 +55,7 @@ def consumption():
 
 
     return jsonify(con_lst)
+<<<<<<< HEAD
  @app2.route("/generation")
 def generation():
     session = Session(engine)
@@ -65,20 +66,32 @@ def generation():
         Generation.TypeOfProducer,
         Generation.EnergySource,
         Generation.Generated)
+=======
+ 
+# def generation():
+#     session = Session(engine)
+
+#     gen_query = session.query(
+#         Generation.Year,
+#         Generation.State,
+#         Generation.TypeOfProducer,
+#         Generation.EnergySource,
+#         Generation.Generated)
+>>>>>>> abefd17992e77673d556761a26bc3d6e94411ea8
     
-    session.close()
+#     session.close()
 
-    gen_lst = []
-    for year,state,typeofproducer,energysource,generated in gen_query:
-        gen_dict = {}
-        gen_dict["Year"] = year
-        gen_dict["State"] = state
-        gen_dict["TypeOfProducer"] = typeofproducer
-        gen_dict["EnergySource"] = energysource
-        gen_dict["Generated"] = int(generated)
-        gen_lst.append(gen_dict)
+#     gen_lst = []
+#     for year,state,typeofproducer,energysource,generated in gen_query:
+#         gen_dict = {}
+#         gen_dict["Year"] = year
+#         gen_dict["State"] = state
+#         gen_dict["TypeOfProducer"] = typeofproducer
+#         gen_dict["EnergySource"] = energysource
+#         gen_dict["Generated"] = int(generated)
+#         gen_lst.append(gen_dict)
 
-    return jsonify(gen_lst)
+#     return jsonify(gen_lst)
 
 @app2.route("/emissions")
 def emissions():
