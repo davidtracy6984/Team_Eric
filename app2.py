@@ -55,16 +55,16 @@ def consumption():
 
 
     return jsonify(con_lst)
- @app2.route("/generation")
-def generation():
-    session = Session(engine)
+#  @app2.route("/generation")
+# def generation():
+#     session = Session(engine)
 
-    gen_query = session.query(
-        Generation.Year,
-        Generation.State,
-        Generation.TypeOfProducer,
-        Generation.EnergySource,
-        Generation.Generated)
+#     gen_query = session.query(
+#         Generation.Year,
+#         Generation.State,
+#         Generation.TypeOfProducer,
+#         Generation.EnergySource,
+#         Generation.Generated)
     
 #     session.close()
 
