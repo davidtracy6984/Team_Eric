@@ -55,30 +55,30 @@ def consumption():
 
 
     return jsonify(con_lst)
-# 
-def generation():
-    session = Session(engine)
+ 
+# def generation():
+#     session = Session(engine)
 
-    gen_query = session.query(
-        Generation.Year,
-        Generation.State,
-        Generation.TypeOfProducer,
-        Generation.EnergySource,
-        Generation.Generated)
+#     gen_query = session.query(
+#         Generation.Year,
+#         Generation.State,
+#         Generation.TypeOfProducer,
+#         Generation.EnergySource,
+#         Generation.Generated)
     
-    session.close()
+#     session.close()
 
-    gen_lst = []
-    for year,state,typeofproducer,energysource,generated in gen_query:
-        gen_dict = {}
-        gen_dict["Year"] = year
-        gen_dict["State"] = state
-        gen_dict["TypeOfProducer"] = typeofproducer
-        gen_dict["EnergySource"] = energysource
-        gen_dict["Generated"] = int(generated)
-        gen_lst.append(gen_dict)
+#     gen_lst = []
+#     for year,state,typeofproducer,energysource,generated in gen_query:
+#         gen_dict = {}
+#         gen_dict["Year"] = year
+#         gen_dict["State"] = state
+#         gen_dict["TypeOfProducer"] = typeofproducer
+#         gen_dict["EnergySource"] = energysource
+#         gen_dict["Generated"] = int(generated)
+#         gen_lst.append(gen_dict)
 
-    return jsonify(gen_lst)
+#     return jsonify(gen_lst)
 
 
 # def emissions():
