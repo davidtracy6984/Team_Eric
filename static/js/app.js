@@ -20,13 +20,14 @@ function init() {
         });
       });
       stackedArea("US-TOTAL");
+      pieChart("US-TOTAL");
     }
  d3.selectAll("#selDataset").on("change", updatePlotly); 
  function updatePlotly() {
     var selectValue = d3.select("#selDataset").node().value;
        stackedArea(selectValue);
        fido_USMAP(selectValue);
-    //   bubbleChart(selectValue);
+       pieChart(selectValue);
     // Nothing
     //   gaugeChart(selectValue);
   }
@@ -123,4 +124,67 @@ var stacked_year_ng = [];
 function fido_USMAP(selectValue){
 
 }
+function pieChart(selectValue) {
+    d3.json('/consumption').then(function(data) { 
+
+        var pieConsumtion_table = [];
+        var energyUse_table = [];
+        var rows = [];
+        
+
+    //var energy_source = ["NATURAL GAS  MCF","COAL  SHORT TONS","PETROLEUM  BARRELS"]
+    var energySource = [];
+     for (l = 0; l< data.length; l++){
+         energySource.push(data[l].EnergySource);
+     }
+    var energySourceArray = [...new Set(energySource)];
+
+    //console.log(energySourceArray);
+
+    for (eric = 0; eric< data.length; eric++){
+     
+        if ((data[eric].Year == "2018") && (data[eric].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")){
+            rows = [];
+            rows.push(data[eric].State,data[eric].UseOfElectricity, data[eric].EnergySource);
+            pieConsumtion_table.push(rows);
+        }
+    }
+
+    for (j= 0; j< pieConsumtion_table.length; j++){
+
+        if (pieConsumtion_table[j][0] == selectValue){
+            console.log(pieConsumtion_table[j][1]);
+            energyUse_table.push(pieConsumtion_table[j][1]);
+
+        }
+
+    }
+    //console.log(pieConsumtion_table);    
+    console.log(energyUse_table);
+    //console.log(selectValue);
+
+        // Populate teh Pie Chart
+        var data = [{
+            values: energyUse_table, //values for data
+            labels: energySourceArray,
+            type: 'pie'
+            }];
+          
+          var layout = {
+            title: `2018 Data for ${selectValue} Energy use`,
+            height: 500,
+            width: 500,
+            margin: {
+                l: 80,
+                r: 50,
+                b: 10,
+                t: 25,
+                }
+            };
+          
+          Plotly.newPlot('pie', data, layout);
+
+    });
+}
+
 init();
