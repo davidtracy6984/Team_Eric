@@ -55,7 +55,7 @@ def consumption():
 
 
     return jsonify(con_lst)
- 
+ @app2.route("/generation")
 def generation():
     session = Session(engine)
 
@@ -80,7 +80,7 @@ def generation():
 
     return jsonify(gen_lst)
 
-
+@app2.route("/emissions")
 def emissions():
     session = Session(engine)
 
