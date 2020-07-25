@@ -27,6 +27,7 @@ function init() {
        stackedArea(selectValue);
        fido_USMAP(selectValue);
     //   bubbleChart(selectValue);
+    // Nothing
     //   gaugeChart(selectValue);
   }
 function stackedArea(selectValue){
