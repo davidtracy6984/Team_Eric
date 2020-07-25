@@ -30,7 +30,6 @@ def index():
 
 @app2.route("/consumption")
 
-
 def consumption():
     session = Session(engine)
 
@@ -39,24 +38,31 @@ def consumption():
     Consumption.State,
     Consumption.TypeOfProducer,
     Consumption.EnergySource,
-    Consumption.UseOfElectricity)
-    
+    Consumption.UseOfElectricity,
+    Consumption.Lat,
+    Consumption.Long,
+    Consumption.StateName)
     session.close()
 
     con_lst = []
-    for year,state,typeofproducer,energysource,useofelectricity in con_query:
+    for year,state,typeofproducer,energysource,useofelectricity,Lat,Long,StateName in con_query:
         con_dict = {}
         con_dict["Year"] = str(year)
         con_dict["State"] = state
         con_dict["TypeOfProducer"] = typeofproducer
         con_dict["EnergySource"] = energysource
         con_dict["UseOfElectricity"] = int(useofelectricity)
+        con_dict["Lat"] = Lat
+        con_dict["Long"] = Long
+        con_dict["StateName"] = StateName
         con_lst.append(con_dict)
 
 
     return jsonify(con_lst)
-#  @app2.route("/generation")
+ 
+# @app2.route("/generation")
 # def generation():
+    
 #     session = Session(engine)
 
 #     gen_query = session.query(
@@ -64,51 +70,57 @@ def consumption():
 #         Generation.State,
 #         Generation.TypeOfProducer,
 #         Generation.EnergySource,
-#         Generation.Generated)
-    
+#         Generation.Generated,
+#         Generation.Lat,
+#         Generation.Long,
+#         Generation.StateName)
+        
 #     session.close()
 
 #     gen_lst = []
-#     for year,state,typeofproducer,energysource,generated in gen_query:
+#     for year,state,typeofproducer,energysource,generated,Lat,Long,StateName in gen_query:
 #         gen_dict = {}
 #         gen_dict["Year"] = year
 #         gen_dict["State"] = state
 #         gen_dict["TypeOfProducer"] = typeofproducer
 #         gen_dict["EnergySource"] = energysource
 #         gen_dict["Generated"] = int(generated)
+#         gen_dict["Lat"] = Lat
+#         gen_dict["Long"] = Long
+#         gen_dict["StateName"] = StateName
 #         gen_lst.append(gen_dict)
 
 #     return jsonify(gen_lst)
 
-@app2.route("/emissions")
-def emissions():
-    session = Session(engine)
+# @app2.route("/emissions")
+# def emissions():
+#     session = Session(engine)
 
-    emm_query = session.query(
-        Emissions.Year,
-        Emissions.State,
-        Emissions.TypeOfProducer,
-        Emissions.EnergySource,
-        Emissions.C02,
-        Emissions.S02,
-        Emissions.N0x)
+#     emm_query = session.query(
+#         Emissions.Year,
+#         Emissions.State,
+#         Emissions.TypeOfProducer,
+#         Emissions.EnergySource,
+#         Emissions.C02,
+#         Emissions.S02,
+#         Emissions.N0x)
     
-    session.close()
+#     session.close()
 
-    emm_lst = []
-    for year,state,typeofproducer,energysource,c02,s02,n0x in emm_query:
-        emm_dict = {}
-        emm_dict["Year"] = str(year)
-        emm_dict["State"] = state
-        emm_dict["TypeOfProducer"] = typeofproducer
-        emm_dict["EnergySource"] = energysource
-        emm_dict["C02"] = c02
-        emm_dict["S02"] = s02
-        emm_dict["N0x"] = n0x
-        emm_lst.append(emm_dict)
+#     emm_lst = []
+#     for year,state,typeofproducer,energysource,c02,s02,n0x in emm_query:
+#         emm_dict = {}
+#         emm_dict["Year"] = str(year)
+#         emm_dict["State"] = state
+#         emm_dict["TypeOfProducer"] = typeofproducer
+#         emm_dict["EnergySource"] = energysource
+#         emm_dict["C02"] = c02
+#         emm_dict["S02"] = s02
+#         emm_dict["N0x"] = n0x
+#         emm_lst.append(emm_dict)
 
 
-    return jsonify(emm_lst)
+#     return jsonify(emm_lst)
 
 
 
