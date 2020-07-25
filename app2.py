@@ -55,7 +55,7 @@ def consumption():
 
 
     return jsonify(con_lst)
-
+# 
 def generation():
     session = Session(engine)
 
