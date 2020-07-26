@@ -22,6 +22,7 @@ function init() {
     pieChart("US-TOTAL");
     gen_stackedArea("US-TOTAL");
     gen_pieChart("US-TOTAL");
+    emm_pieChart("US-TOTAL");
 
 }
 d3.selectAll("#selDataset").on("change", updatePlotly);
@@ -31,8 +32,8 @@ function updatePlotly() {
     pieChart(selectValue);
     gen_stackedArea(selectValue);
     gen_pieChart(selectValue);
-    emm_stackedArea(selectValue);
-    //emm_pie(selectValue);
+    //emm_stackedArea(selectValue);
+    emm_pieChart(selectValue);
     //emm1(selectValue);
     //emm2(selectValue);
 }
@@ -409,14 +410,12 @@ function emm_pieChart(selectValue) {
         var energyUse_table = [];
         var rows = [];
 
-
         //var energy_source = ["NATURAL GAS  MCF","COAL  SHORT TONS","PETROLEUM  BARRELS"]
         var energySource = [];
         for (l = 0; l < data.length; l++) {
             energySource.push(data[l].EnergySource);
         }
         var energySourceArray = [...new Set(energySource)];
-
         for (eric = 0; eric < data.length; eric++) {
 
             if ((data[eric].Year == "2018") && (data[eric].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
