@@ -19,21 +19,21 @@ function init() {
         });
     });
     stackedArea("US-TOTAL");
-    pieChart("US-TOTAL");
+    //pieChart("US-TOTAL");
     gen_stackedArea("US-TOTAL");
     gen_pieChart("US-TOTAL");
-    emm_pieChart("US-TOTAL");
+    //emm_pieChart("US-TOTAL");
 
 }
 d3.selectAll("#selDataset").on("change", updatePlotly);
 function updatePlotly() {
     var selectValue = d3.select("#selDataset").node().value;
     stackedArea(selectValue);
-    pieChart(selectValue);
+    //pieChart(selectValue);
     gen_stackedArea(selectValue);
     gen_pieChart(selectValue);
     //emm_stackedArea(selectValue);
-    emm_pieChart(selectValue);
+    //emm_pieChart(selectValue);
     //emm1(selectValue);
     //emm2(selectValue);
 }
@@ -302,13 +302,16 @@ function gen_pieChart(selectValue) {
 
         var layout = {
             title: `2018 Data for ${selectValue} Energy Generation`,
-            height: 500,
-            width: 500,
+            height: 900,
+            width: 900,
             margin: {
                 l: 0,
                 r: 0,
                 b: 10,
                 t: 25,
+            },
+            legend :{
+              x:1,
             }
         };
 
