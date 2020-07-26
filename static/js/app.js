@@ -1,7 +1,6 @@
 var data;
 function init() {
     d3.json('/consumption').then(function (data) {
-        //console.log(data);
         var importedState = [];
         for (l = 0; l < data.length; l++) {
             importedState.push(data[l].State);
@@ -32,6 +31,10 @@ function updatePlotly() {
     pieChart(selectValue);
     gen_stackedArea(selectValue);
     gen_pieChart(selectValue);
+    emm_stackedArea(selectValue);
+    //emm_pie(selectValue);
+    //emm1(selectValue);
+    //emm2(selectValue);
 }
 function stackedArea(selectValue) {
     d3.json('/consumption').then(function (data) {
@@ -44,9 +47,6 @@ function stackedArea(selectValue) {
         var energy_source = ["NATURAL GAS  MCF", "COAL  SHORT TONS", "PETROLEUM  BARRELS"]
 
         for (i = 0; i < data.length; i++) {
-            //for (eric = 0; eric<energy_source.length; eric++){
-
-
             if ((data[i].EnergySource == energy_source[2]) && (data[i].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
                 rows = [];
                 rows.push(data[i].Year, data[i].State, data[i].UseOfElectricity);
@@ -55,9 +55,6 @@ function stackedArea(selectValue) {
             }
         }
         for (i = 0; i < data.length; i++) {
-            //for (eric = 0; eric<energy_source.length; eric++){
-
-
             if ((data[i].EnergySource == energy_source[1]) && (data[i].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
                 rows = [];
                 rows.push(data[i].Year, data[i].State, data[i].UseOfElectricity);
@@ -66,9 +63,6 @@ function stackedArea(selectValue) {
             }
         }
         for (i = 0; i < data.length; i++) {
-            //for (eric = 0; eric<energy_source.length; eric++){
-
-
             if ((data[i].EnergySource == energy_source[0]) && (data[i].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
                 rows = [];
                 rows.push(data[i].Year, data[i].State, data[i].UseOfElectricity);
@@ -79,10 +73,8 @@ function stackedArea(selectValue) {
         var stacked_use_petroleum = [];
         var stacked_year_petroleum = [];
 
-        //console.log(petroleum_table);
         for (l = 0; l < petroleum_table.length; l++) {
             if (petroleum_table[l][1] == selectValue) {
-                // console.log(petroleum_table[l]);
                 stacked_year_petroleum.push(petroleum_table[l][0]);
                 stacked_use_petroleum.push(petroleum_table[l][2]);
             }
@@ -90,27 +82,21 @@ function stackedArea(selectValue) {
         var stacked_use_coal = [];
         var stacked_year_coal = [];
 
-        //console.log(petroleum_table);
         for (k = 0; k < coal_table.length; k++) {
             if (coal_table[k][1] == selectValue) {
-                // console.log(coal_table[l]);
                 stacked_year_coal.push(coal_table[k][0]);
                 stacked_use_coal.push(coal_table[k][2]);
             }
         }
-        //console.log(stacked_use_coal);
         var stacked_use_ng = [];
         var stacked_year_ng = [];
 
-        //console.log(petroleum_table);
         for (m = 0; m < naturalgas_table.length; m++) {
             if (naturalgas_table[m][1] == selectValue) {
-                // console.log(coal_table[l]);
                 stacked_year_ng.push(naturalgas_table[m][0]);
                 stacked_use_ng.push(naturalgas_table[m][2]);
             }
         }
-        //console.log(stacked_use_coal);
 
 
         var plotDiv = document.getElementById('stacked');
@@ -139,8 +125,6 @@ function pieChart(selectValue) {
         }
         var energySourceArray = [...new Set(energySource)];
 
-        //console.log(energySourceArray);
-
         for (eric = 0; eric < data.length; eric++) {
 
             if ((data[eric].Year == "2018") && (data[eric].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
@@ -153,15 +137,11 @@ function pieChart(selectValue) {
         for (j = 0; j < pieConsumtion_table.length; j++) {
 
             if (pieConsumtion_table[j][0] == selectValue) {
-                //console.log(pieConsumtion_table[j][1]);
                 energyUse_table.push(pieConsumtion_table[j][1]);
 
             }
 
         }
-        //console.log(pieConsumtion_table);    
-        //console.log(energyUse_table);
-        //console.log(selectValue);
 
         // Populate teh Pie Chart
         var data = [{
@@ -208,8 +188,6 @@ function gen_stackedArea(selectValue) {
             "NUCLEAR"]
 
         for (i = 0; i < data.length; i++) {
-            //for (eric = 0; eric<energy_source.length; eric++){
-
 
             if ((data[i].EnergySource == energy_source[2]) && (data[i].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
                 rows = [];
@@ -218,11 +196,8 @@ function gen_stackedArea(selectValue) {
 
             }
         }
-        //console.log(petroleum_table);
 
         for (j = 0; j < data.length; j++) {
-            //for (eric = 0; eric<energy_source.length; eric++){
-
 
             if ((data[j].EnergySource == energy_source[1]) && (data[j].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
                 rows = [];
@@ -232,9 +207,6 @@ function gen_stackedArea(selectValue) {
             }
         }
         for (k = 0; k < data.length; k++) {
-            //for (eric = 0; eric<energy_source.length; eric++){
-
-
             if ((data[k].EnergySource == energy_source[0]) && (data[k].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
                 rows = [];
                 rows.push(data[k].Year, data[k].State, data[k].Generated);
@@ -245,10 +217,8 @@ function gen_stackedArea(selectValue) {
         var stacked_use_petroleum = [];
         var stacked_year_petroleum = [];
 
-        //console.log(petroleum_table);
         for (l = 0; l < petroleum_table.length; l++) {
             if (petroleum_table[l][1] == selectValue) {
-                // console.log(petroleum_table[l]);
                 stacked_year_petroleum.push(petroleum_table[l][0]);
                 stacked_use_petroleum.push(petroleum_table[l][2]);
             }
@@ -256,27 +226,21 @@ function gen_stackedArea(selectValue) {
         var stacked_use_coal = [];
         var stacked_year_coal = [];
 
-        //console.log(petroleum_table);
         for (m = 0; m < coal_table.length; m++) {
             if (coal_table[m][1] == selectValue) {
-                // console.log(coal_table[l]);
                 stacked_year_coal.push(coal_table[m][0]);
                 stacked_use_coal.push(coal_table[m][2]);
             }
         }
-        //console.log(stacked_use_coal);
         var stacked_use_ng = [];
         var stacked_year_ng = [];
 
-        //console.log(petroleum_table);
         for (n = 0; n < naturalgas_table.length; n++) {
             if (naturalgas_table[n][1] == selectValue) {
-                // console.log(coal_table[l]);
                 stacked_year_ng.push(naturalgas_table[n][0]);
                 stacked_use_ng.push(naturalgas_table[n][2]);
             }
         }
-        //console.log(stacked_use_coal);
 
 
         //var plotDiv = document.getElementById('gen_stacked');
@@ -305,8 +269,6 @@ function gen_pieChart(selectValue) {
         }
         var energySourceArray = [...new Set(energySource)];
 
-        //console.log(energySourceArray);
-
         for (eric = 0; eric < data.length; eric++) {
 
             if ((data[eric].Year == "2018") && (data[eric].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
@@ -315,20 +277,15 @@ function gen_pieChart(selectValue) {
                 pieConsumtion_table.push(rows);
             }
         }
-        console.log(pieConsumtion_table);
+        //console.log(pieConsumtion_table);
         for (o = 0; o < pieConsumtion_table.length; o++) {
 
             if (pieConsumtion_table[o][0] == selectValue) {
-                // console.log(pieConsumtion_table[o][0]);
                 energyUse_table.push(pieConsumtion_table[o][1]);
 
             }
 
         }
-        //console.log(pieConsumtion_table);    
-        //console.log(energyUse_table);
-        //console.log(selectValue);
-
         // Populate teh Pie Chart
         var data = [{
             values: energyUse_table, //values for data
@@ -385,11 +342,8 @@ function emm_stackedArea(selectValue) {
 
             }
         }
-        //console.log(petroleum_table);
 
         for (j = 0; j < data.length; j++) {
-            //for (eric = 0; eric<energy_source.length; eric++){
-
 
             if ((data[j].EnergySource == energy_source[1]) && (data[j].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
                 rows = [];
@@ -399,7 +353,6 @@ function emm_stackedArea(selectValue) {
             }
         }
         for (k = 0; k < data.length; k++) {
-            //for (eric = 0; eric<energy_source.length; eric++){
 
 
             if ((data[k].EnergySource == energy_source[0]) && (data[k].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
@@ -412,10 +365,8 @@ function emm_stackedArea(selectValue) {
         var stacked_use_petroleum = [];
         var stacked_year_petroleum = [];
 
-        //console.log(petroleum_table);
         for (l = 0; l < petroleum_table.length; l++) {
             if (petroleum_table[l][1] == selectValue) {
-                // console.log(petroleum_table[l]);
                 stacked_year_petroleum.push(petroleum_table[l][0]);
                 stacked_use_petroleum.push(petroleum_table[l][2]);
             }
@@ -423,27 +374,21 @@ function emm_stackedArea(selectValue) {
         var stacked_use_coal = [];
         var stacked_year_coal = [];
 
-        //console.log(petroleum_table);
         for (m = 0; m < coal_table.length; m++) {
             if (coal_table[m][1] == selectValue) {
-                // console.log(coal_table[l]);
                 stacked_year_coal.push(coal_table[m][0]);
                 stacked_use_coal.push(coal_table[m][2]);
             }
         }
-        //console.log(stacked_use_coal);
         var stacked_use_ng = [];
         var stacked_year_ng = [];
 
-        //console.log(petroleum_table);
         for (n = 0; n < naturalgas_table.length; n++) {
             if (naturalgas_table[n][1] == selectValue) {
-                // console.log(coal_table[l]);
                 stacked_year_ng.push(naturalgas_table[n][0]);
                 stacked_use_ng.push(naturalgas_table[n][2]);
             }
         }
-        //console.log(stacked_use_coal);
 
 
         //var plotDiv = document.getElementById('gen_stacked');
@@ -472,8 +417,6 @@ function emm_pieChart(selectValue) {
         }
         var energySourceArray = [...new Set(energySource)];
 
-        //console.log(energySourceArray);
-
         for (eric = 0; eric < data.length; eric++) {
 
             if ((data[eric].Year == "2018") && (data[eric].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
@@ -482,19 +425,15 @@ function emm_pieChart(selectValue) {
                 pieConsumtion_table.push(rows);
             }
         }
-        console.log(pieConsumtion_table);
+        //console.log(pieConsumtion_table);
         for (o = 0; o < pieConsumtion_table.length; o++) {
 
             if (pieConsumtion_table[o][0] == selectValue) {
-                // console.log(pieConsumtion_table[o][0]);
                 energyUse_table.push(pieConsumtion_table[o][1]);
 
             }
 
         }
-        //console.log(pieConsumtion_table);    
-        //console.log(energyUse_table);
-        //console.log(selectValue);
 
         // Populate teh Pie Chart
         var data = [{
@@ -519,6 +458,11 @@ function emm_pieChart(selectValue) {
 
     });
 }
+function emm1(selectValue){
 
+}
+function emm2(selectValue){
+
+}
 
 init();
