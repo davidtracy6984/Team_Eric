@@ -258,39 +258,45 @@ function gen_stackedArea(selectValue) {
 function gen_pieChart(selectValue) {
     d3.json('/generation').then(function (data) {
 
-        var pieConsumtion_table = [];
+        var pie_gen_table = [];
         var energyUse_table = [];
+        var energySourceArray = [];
         var rows = [];
 
 
         //var energy_source = ["NATURAL GAS  MCF","COAL  SHORT TONS","PETROLEUM  BARRELS"]
-        var energySource = [];
-        for (l = 0; l < data.length; l++) {
-            energySource.push(data[l].EnergySource);
-        }
-        var energySourceArray = [...new Set(energySource)];
+        // var energySource = [];
+        // for (l = 0; l < data.length; l++) {
+        //     energySource.push(data[l].EnergySource);
+        // }
+        // var energySourceArray = [...new Set(energySource)];
 
         for (eric = 0; eric < data.length; eric++) {
 
-            if ((data[eric].Year == "2018") && (data[eric].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")) {
+            if ((data[eric].Year == "2018") && (data[eric].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY") &&(data[eric].EnergySource !== "US-TOTALS")) {
                 rows = [];
                 rows.push(data[eric].State, data[eric].Generated, data[eric].EnergySource);
-                pieConsumtion_table.push(rows);
+                pie_gen_table.push(rows);
             }
         }
-        //console.log(pieConsumtion_table);
-        for (o = 0; o < pieConsumtion_table.length; o++) {
+        for (o = 0; o < pie_gen_table.length; o++) {
 
-            if (pieConsumtion_table[o][0] == selectValue) {
-                energyUse_table.push(pieConsumtion_table[o][1]);
+            if (pie_gen_table[o][0] == selectValue) {
+                energyUse_table.push(pie_gen_table[o][1]);
+                energySourceArray.push(pie_gen_table[o][2])
+                // rows = [];
+                // rows.push(pie_gen_table[o][1],pie_gen_table[o][2]);
+                // energyUse_table.push(rows);
 
             }
+
 
         }
         // Populate teh Pie Chart
         var data = [{
             values: energyUse_table, //values for data
             labels: energySourceArray,
+            //labels: energyUse_table[1],
             type: 'pie'
         }];
 
