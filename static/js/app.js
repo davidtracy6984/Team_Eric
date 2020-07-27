@@ -39,7 +39,7 @@ function Solar(){
     var gwh_14 = [];
     var state_19 = [];
     var gwh_19 = [];
-
+console.log(data);
     for(eric = 0; eric < data.length; eric++){
       if (data[eric].Year == "2014"){
         state_14.push(data[eric].State);
@@ -50,6 +50,8 @@ function Solar(){
         gwh_19.push(data[eric].State);
       }
     }
+    //console.log(state_14);
+    //console.log(state_19);
 
     // Populate the Pie Chart
     var data = [{

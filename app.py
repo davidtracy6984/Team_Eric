@@ -126,11 +126,12 @@ def solar():
     session.close()
 
     sol_lst = []
-    for year,state,gwh in sol_query:
+    for year,state,GWH in sol_query:
         sol_dict = {}
         sol_dict["Year"] = str(year)
         sol_dict["State"] = state
         sol_dict["GWH"] = GWH
+        sol_lst.append(sol_dict)
 
     return jsonify(sol_lst)
 
@@ -151,7 +152,7 @@ def wind():
         wind_dict["Year"] = str(year)
         wind_dict["State"] = state
         wind_dict["GWH"] = GWH
-
+        wind_lst.append(wind_dict)
     return jsonify(wind_lst)
 
 @app.route("/emission_1")
@@ -169,7 +170,7 @@ def emission_1():
         em1_dict = {}
         em1_dict["UseSector"] = sector
         em1_dict["UsePercentage"] = percentage
-
+        em1_lst.append(em1_dict)
     return jsonify(em1_lst)
 
 @app.route("/emission_2")
@@ -179,6 +180,7 @@ def emission_2():
     em2_query = session.query(
         Emission_2.UseSector,
         Emission_2.UsePercentage)
+        
 
     session.close()
 
@@ -187,6 +189,7 @@ def emission_2():
         em2_dict = {}
         em2_dict["UseSector"] = sector
         em2_dict["UsePercentage"] = percentage
+        em2_lst.append(em2_dict)
 
     return jsonify(em2_lst)
 
