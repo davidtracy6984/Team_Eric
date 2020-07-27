@@ -22,6 +22,8 @@ function init() {
     gen_pieChart("US-TOTAL");
     Solar();
     Wind();
+    Emm1();
+    Emm2();
 
 }
 d3.selectAll("#selDataset").on("change", updatePlotly);
@@ -29,8 +31,10 @@ function updatePlotly() {
     var selectValue = d3.select("#selDataset").node().value;
     con_stackedArea(selectValue);
     gen_pieChart(selectValue);
-    Solar();
-    Wind();
+    // Solar();
+    // Wind();
+    // Emm1();
+    // Emm2();
 }
 
 function Solar(){
@@ -169,33 +173,25 @@ function Wind(){
   });
 }
 
-function Wind(){
-  d3.json('/wind').then(function(data){
-    var state_14 = [];
-    var gwh_14 = [];
-    var state_19 = [];
-    var gwh_19 = [];
+function Emm1(){
+  d3.json('/emission_1').then(function(data){
+    var Sector_use = [];
+    var Percentage_use = [];
 
     for(eric = 0; eric < data.length; eric++){
-      if (data[eric].Year == "2014"){
-        state_14.push(data[eric].State);
-        gwh_14.push(data[eric].GWH);
-      }
-      else {
-        state_19.push(data[eric].State);
-        gwh_19.push(data[eric].GWH);
-      }
+      Sector_use.push(data[eric].UseSector)
+      Percentage_use.push(data[eric].UsePercentage)
     }
 
     // Populate the Pie Chart
     var data = [{
-        values: gwh_14, //values for data
-        labels: state_14,
+        values: Percentage_use, //values for data
+        labels: Sector_use,
         type: 'pie'
     }];
 
     var layout = {
-        title: "Wind 2014",
+        title: "Emission By Use",
         height: 400,
         width: 400,
         margin: {
@@ -208,6 +204,45 @@ function Wind(){
           x:1,
         }
     };
+
+    Plotly.newPlot('emission1', data, layout);
+
+  });
+}
+
+function Emm2(){
+  d3.json('/emission_2').then(function(data){
+    var Sector_use = [];
+    var Percentage_use = [];
+
+    for(eric = 0; eric < data.length; eric++){
+      Sector_use.push(data[eric].UseSector)
+      Percentage_use.push(data[eric].UsePercentage)
+    }
+
+    // Populate the Pie Chart
+    var data = [{
+        values: Percentage_use, //values for data
+        labels: Sector_use,
+        type: 'pie'
+    }];
+
+    var layout = {
+        title: "Emission By Sector",
+        height: 400,
+        width: 400,
+        margin: {
+            l: 0,
+            r: 0,
+            b: 10,
+            t: 25,
+        },
+        legend :{
+          x:1,
+        }
+    };
+
+    Plotly.newPlot('emission2', data, layout);
 
   });
 }

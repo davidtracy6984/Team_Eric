@@ -178,8 +178,8 @@ def emission_2():
     session = Session(engine)
 
     em2_query = session.query(
-        Emission_2.UseSector,
-        Emission_2.UsePercentage)
+        Emission_2.Sector,
+        Emission_2.SectorPercent)
 
 
     session.close()
@@ -188,7 +188,7 @@ def emission_2():
     for sector,percentage in em2_query:
         em2_dict = {}
         em2_dict["UseSector"] = sector
-        em2_dict["UsePercentage"] = percentage
+        em2_dict["Percentage"] = percentage
         em2_lst.append(em2_dict)
 
     return jsonify(em2_lst)
