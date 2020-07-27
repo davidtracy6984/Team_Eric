@@ -20,9 +20,10 @@ function init() {
     });
     stackedArea("US-TOTAL");
     //pieChart("US-TOTAL");
-    gen_stackedArea("US-TOTAL");
+    //gen_stackedArea("US-TOTAL");
     gen_pieChart("US-TOTAL");
     //emm_pieChart("US-TOTAL");
+    emm_treeChart("US-TOTAL");
 
 }
 d3.selectAll("#selDataset").on("change", updatePlotly);
@@ -30,12 +31,11 @@ function updatePlotly() {
     var selectValue = d3.select("#selDataset").node().value;
     stackedArea(selectValue);
     //pieChart(selectValue);
-    gen_stackedArea(selectValue);
+    //gen_stackedArea(selectValue);
     gen_pieChart(selectValue);
     //emm_stackedArea(selectValue);
     //emm_pieChart(selectValue);
-    //emm1(selectValue);
-    //emm2(selectValue);
+    emm_treeChart(selectValue);
 }
 function stackedArea(selectValue) {
     d3.json('/consumption').then(function (data) {
@@ -466,11 +466,86 @@ function emm_pieChart(selectValue) {
 
     });
 }
-function emm1(selectValue){
 
-}
-function emm2(selectValue){
+function emm_treeChart(selectValue) {
+    d3.json('/emissions').then(function (data) {
 
+        var emm_table = [];
+        var state_level = [];
+        var parents_a = [];
+        var labels_a = [];
+        var values_a = [];
+        var rows = [];
+
+        for (row = 0; row<data.length; row++){
+          if ((data[row].Year == "2018") && (data[row].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")
+          && (data[row].State == selectValue) && (data[row].EnergySource !== "ALL SOURCES")) {
+                   rows = [];
+                   rows.push(data[row].State,data[row].EnergySource,data[row].C02,data[row].S02,data[row].N0x);
+                   emm_table.push(rows);
+               }
+        }
+        //console.log(emm_table);
+
+        var energySource = [];
+        for (l = 0; l < emm_table.length; l++) {
+            energySource.push(emm_table[l][1]);
+        }
+        var energySourceArray = [...new Set(energySource)];
+        //console.log(energySourceArray);
+        for (o = 0; o < emm_table.length; o++){
+          parents_a.push("");
+          parents_a.push(emm_table[o][1]);
+          parents_a.push(emm_table[o][1]);
+          parents_a.push(emm_table[o][1]);
+          labels_a.push(emm_table[o][1]);
+          labels_a.push("C02");
+          labels_a.push("S02");
+          labels_a.push("N0x");
+          values_a.push(Number(emm_table[o][2])+Number(emm_table[o][3])+Number(emm_table[o][4]));
+          values_a.push(emm_table[o][2]);
+          values_a.push(emm_table[o][3]);
+          values_a.push(emm_table[o][4]);
+        }
+        console.log(values_a);
+        var data = [{
+          type: "treemap",
+          labels: labels_a,
+          parents: parents_a,
+          values: values_a,
+          textinfo: "label+value"
+        }];
+        var margin = {
+          t:20,
+          l:20,
+          r:20,
+          b:20
+        };
+
+        Plotly.newPlot('emm_pie', data, margin)
+
+        // // Populate teh Pie Chart
+        // var data = [{
+        //     values: energyUse_table, //values for data
+        //     labels: energySourceArray,
+        //     type: 'pie'
+        // }];
+        //
+        // var layout = {
+        //     title: `2018 Data for ${selectValue} Emissions`,
+        //     height: 500,
+        //     width: 500,
+        //     margin: {
+        //         l: 0,
+        //         r: 0,
+        //         b: 10,
+        //         t: 25,
+        //     }
+        // };
+
+        //Plotly.newPlot('emm_pie', data, layout);
+
+    });
 }
 
 init();
