@@ -20,6 +20,8 @@ function init() {
     });
     con_stackedArea("US-TOTAL");
     gen_pieChart("US-TOTAL");
+    Solar();
+    //Sol_2019();
 
 }
 d3.selectAll("#selDataset").on("change", updatePlotly);
@@ -27,7 +29,78 @@ function updatePlotly() {
     var selectValue = d3.select("#selDataset").node().value;
     con_stackedArea(selectValue);
     gen_pieChart(selectValue);
+    Solar();
+    //Sol_2019();
 }
+
+function Solar(){
+  d3.json('/solar').then(function(data){
+    var state_14 = [];
+    var gwh_14 = [];
+    var state_19 = [];
+    var gwh_19 = [];
+
+    for(eric = 0; eric < data.length; eric++){
+      if (data[eric].Year == "2014"){
+        state_14.push(data[eric].State);
+        gwh_14.push(data[eric].State);
+      }
+      else {
+        state_19.push(data[eric].State);
+        gwh_19.push(data[eric].State);
+      }
+    }
+
+    // Populate the Pie Chart
+    var data = [{
+        values: gwh_14, //values for data
+        labels: state_14,
+        type: 'pie'
+    }];
+
+    var layout = {
+        title: "Solar 2014",
+        height: 700,
+        width: 700,
+        margin: {
+            l: 0,
+            r: 0,
+            b: 10,
+            t: 25,
+        },
+        legend :{
+          x:1,
+        }
+    };
+
+    Plotly.newPlot('pie', data, layout);
+
+    var data = [{
+        values: gwh_19, //values for data
+        labels: state_19,
+        type: 'pie'
+    }];
+
+    var layout = {
+        title: "Solar 2019",
+        height: 700,
+        width: 700,
+        margin: {
+            l: 0,
+            r: 0,
+            b: 10,
+            t: 25,
+        },
+        legend :{
+          x:1,
+        }
+    };
+
+    Plotly.newPlot('gen_pie', data, layout);
+
+  });
+}
+
 function con_stackedArea(selectValue) {
     d3.json('/consumption').then(function (data) {
         var petroleum_table = [];
@@ -110,8 +183,8 @@ function gen_pieChart(selectValue) {
 
         var layout = {
             title: `2018 Data for ${selectValue} Energy Generation`,
-            height: 900,
-            width: 900,
+            height: 700,
+            width: 700,
             margin: {
                 l: 0,
                 r: 0,
@@ -123,7 +196,7 @@ function gen_pieChart(selectValue) {
             }
         };
 
-        Plotly.newPlot('gen_pie', data, layout);
+        Plotly.newPlot('gen_stacked', data, layout);
 
     });
 }
