@@ -1,80 +1,117 @@
-# import necessary libraries
-from models import create_classes
-import os
-from flask import (
-    Flask,
-    render_template,
-    jsonify,
-    request,
-    redirect)
+import numpy as np
 
-#################################################
-# Flask Setup
-#################################################
-app = Flask(__name__)
+import sqlalchemy
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, func
+
+from flask import Flask, jsonify, render_template
+
 
 #################################################
 # Database Setup
 #################################################
+engine = create_engine("sqlite:///db.sqlite")
 
-from flask_sqlalchemy import SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') #or "sqlite:///db.sqlite"
+# reflect an existing database into a new model
+Base = automap_base()
+# reflect the tables
+Base.prepare(engine, reflect=True)
+Consumption = Base.classes.consumption
+Generation = Base.classes.generation
+Emissions = Base.classes.emissions
 
-# Remove tracking modifications
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-
-# Pet = create_classes(db)
-
-# create route that renders index.html template
+app = Flask(__name__)
 @app.route("/")
-def home():
+
+def index():
+    """Return the homepage."""
     return render_template("index.html")
 
-
-# Query the database and send the jsonified results
-@app.route("/send", methods=["GET", "POST"])
-def send():
-    if request.method == "POST":
-       # name = request.form["petName"]
-       # lat = request.form["petLat"]
-       # lon = request.form["petLon"]
-
-       # pet = Pet(name=name, lat=lat, lon=lon)
-       # db.session.add(pet)
-        db.session.commit()
-        return redirect("/", code=302)
-
-    return render_template("form.html")
+@app.route("/consumption")
 
 
-@app.route("/api/pals")
-def pals():
-    results = db.session.query(Pet.name, Pet.lat, Pet.lon).all()
+def consumption():
+    session = Session(engine)
 
-    hover_text = [result[0] for result in results]
-    lat = [result[1] for result in results]
-    lon = [result[2] for result in results]
+    con_query = session.query(
+    Consumption.Year,
+    Consumption.State,
+    Consumption.TypeOfProducer,
+    Consumption.EnergySource,
+    Consumption.UseOfElectricity)
 
-    pet_data = [{
-        "type": "scattergeo",
-        "locationmode": "USA-states",
-        "lat": lat,
-        "lon": lon,
-        "text": hover_text,
-        "hoverinfo": "text",
-        "marker": {
-            "size": 50,
-            "line": {
-                "color": "rgb(8,8,8)",
-                "width": 1
-            },
-        }
-    }]
+    session.close()
 
-    return jsonify(pet_data)
+    con_lst = []
+    for year,state,typeofproducer,energysource,useofelectricity in con_query:
+        con_dict = {}
+        con_dict["Year"] = str(year)
+        con_dict["State"] = state
+        con_dict["TypeOfProducer"] = typeofproducer
+        con_dict["EnergySource"] = energysource
+        con_dict["UseOfElectricity"] = int(useofelectricity)
+        con_lst.append(con_dict)
+
+
+    return jsonify(con_lst)
+
+@app.route("/generation")
+def generation():
+    session = Session(engine)
+
+    gen_query = session.query(
+    Generation.Year,
+    Generation.State,
+    Generation.TypeOfProducer,
+    Generation.EnergySource,
+    Generation.Generated)
+
+    session.close()
+
+    gen_lst = []
+    for year,state,typeofproducer,energysource,generated in gen_query:
+        gen_dict = {}
+        gen_dict["Year"] = year
+        gen_dict["State"] = state
+        gen_dict["TypeOfProducer"] = typeofproducer
+        gen_dict["EnergySource"] = energysource
+        gen_dict["Generated"] = int(generated)
+        gen_lst.append(gen_dict)
+
+    return jsonify(gen_lst)
+
+@app.route("/emissions")
+def emissions():
+    session = Session(engine)
+
+    emm_query = session.query(
+        Emissions.Year,
+        Emissions.State,
+        Emissions.TypeOfProducer,
+        Emissions.EnergySource,
+        Emissions.C02,
+        Emissions.S02,
+        Emissions.N0x)
+
+    session.close()
+
+    emm_lst = []
+    for year,state,typeofproducer,energysource,c02,s02,n0x in emm_query:
+        emm_dict = {}
+        emm_dict["Year"] = str(year)
+        emm_dict["State"] = state
+        emm_dict["TypeOfProducer"] = typeofproducer
+        emm_dict["EnergySource"] = energysource
+        emm_dict["C02"] = c02
+        emm_dict["S02"] = s02
+        emm_dict["N0x"] = n0x
+        emm_lst.append(emm_dict)
+
+
+    return jsonify(emm_lst)
+
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
