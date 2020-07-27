@@ -147,7 +147,7 @@ def wind():
     session.close()
 
     wind_lst = []
-    for year,state,gwh in wind_query:
+    for year,state,GWH in wind_query:
         wind_dict = {}
         wind_dict["Year"] = str(year)
         wind_dict["State"] = state
@@ -180,7 +180,7 @@ def emission_2():
     em2_query = session.query(
         Emission_2.UseSector,
         Emission_2.UsePercentage)
-        
+
 
     session.close()
 
