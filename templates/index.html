@@ -9,60 +9,68 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
-<body>
+<body style="background-color:DarkSlateGrey;">
   <div class="container">
-    <div class="row">
-      <div class="col-sm-12 jumbotron text-center">
+<div class="row">
+<div class="col-sm-12 jumbotron text-center">
         <h1>Energy Use and Emissions</h1>
         <p>Use the interactive charts below to explore the dataset</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-2">
-        <div class="well">
+</div>
+</div>
+<div class="row">
+<div class="col-md-2">
+<div class="well">
           <h5>State ID:</h5>
           <select id="selDataset"></select>
-        </div>
-      </div>
-      <div class="col-md-5">
-        <div id="pie">
-        </div>
-      </div>
-      <div class="col-md-5">
-        <div id=gen_pie>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div id="stacked">
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div id="gen_stacked">
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
+ </div>
+ </div>
+<div class="col-md-10">
+<div id="conStack">
+ </div>
+ </div>
+ </div>
 <div class="row">
 <div class="col-md-12">
-  <div id="emm_stacked">
-  </div>
-</div>
-</div>
-</div>
-</div>
-</div>
+<div id="genStack">
+ </div>
+ </div>
+ </div>
 <div class="row">
 <div class="col-md-12">
-  <div id="emm_pie">
+<div id="genPie">
+ </div>
+ </div>
+ </div>
+<div class="row">
+<div class="col-md-6">
+<div id="solar14">
   </div>
-</div>
-</div>
+  </div>
+<div class="col-md-6">
+<div id="solar19">
+  </div>
+  </div>
+  </div>
+<div class="row">
+<div class="col-md-6">
+<div id="wind14">
+  </div>
+  </div>
+<div class="col-md-6">
+<div id="wind19">
+  </div>
+  </div>
+  </div>
+<div class="row">
+<div class="col-md-6">
+<div id="emission1">
+  </div>
+  </div>
+<div class="col-md-6">
+<div id="emission2">
+  </div>
+  </div>
+  </div>
   </div>
   <script src="https://cdn.plot.ly/plotly-1.31.2.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>

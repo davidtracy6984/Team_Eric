@@ -21,7 +21,9 @@ function init() {
     con_stackedArea("US-TOTAL");
     gen_pieChart("US-TOTAL");
     Solar();
-    //Sol_2019();
+    Wind();
+    Emm1();
+    Emm2();
 
 }
 d3.selectAll("#selDataset").on("change", updatePlotly);
@@ -29,8 +31,10 @@ function updatePlotly() {
     var selectValue = d3.select("#selDataset").node().value;
     con_stackedArea(selectValue);
     gen_pieChart(selectValue);
-    Solar();
-    //Sol_2019();
+    // Solar();
+    // Wind();
+    // Emm1();
+    // Emm2();
 }
 
 function Solar(){
@@ -39,19 +43,17 @@ function Solar(){
     var gwh_14 = [];
     var state_19 = [];
     var gwh_19 = [];
-console.log(data);
+
     for(eric = 0; eric < data.length; eric++){
       if (data[eric].Year == "2014"){
         state_14.push(data[eric].State);
-        gwh_14.push(data[eric].State);
+        gwh_14.push(data[eric].GWH);
       }
       else {
         state_19.push(data[eric].State);
-        gwh_19.push(data[eric].State);
+        gwh_19.push(data[eric].GWH);
       }
     }
-    //console.log(state_14);
-    //console.log(state_19);
 
     // Populate the Pie Chart
     var data = [{
@@ -62,8 +64,8 @@ console.log(data);
 
     var layout = {
         title: "Solar 2014",
-        height: 700,
-        width: 700,
+        height: 400,
+        width: 400,
         margin: {
             l: 0,
             r: 0,
@@ -75,7 +77,7 @@ console.log(data);
         }
     };
 
-    Plotly.newPlot('pie', data, layout);
+    Plotly.newPlot('solar14', data, layout);
 
     var data = [{
         values: gwh_19, //values for data
@@ -85,8 +87,8 @@ console.log(data);
 
     var layout = {
         title: "Solar 2019",
-        height: 700,
-        width: 700,
+        height: 400,
+        width: 400,
         margin: {
             l: 0,
             r: 0,
@@ -98,7 +100,149 @@ console.log(data);
         }
     };
 
-    Plotly.newPlot('gen_pie', data, layout);
+    Plotly.newPlot('solar19', data, layout);
+
+  });
+}
+
+function Wind(){
+  d3.json('/wind').then(function(data){
+    var state_14 = [];
+    var gwh_14 = [];
+    var state_19 = [];
+    var gwh_19 = [];
+
+    for(eric = 0; eric < data.length; eric++){
+      if (data[eric].Year == "2014"){
+        state_14.push(data[eric].State);
+        gwh_14.push(data[eric].GWH);
+      }
+      else {
+        state_19.push(data[eric].State);
+        gwh_19.push(data[eric].GWH);
+      }
+    }
+
+    // Populate the Pie Chart
+    var data = [{
+        values: gwh_14, //values for data
+        labels: state_14,
+        type: 'pie'
+    }];
+
+    var layout = {
+        title: "Wind 2014",
+        height: 400,
+        width: 400,
+        margin: {
+            l: 0,
+            r: 0,
+            b: 10,
+            t: 25,
+        },
+        legend :{
+          x:1,
+        }
+    };
+
+    Plotly.newPlot('wind14', data, layout);
+
+    var data = [{
+        values: gwh_19, //values for data
+        labels: state_19,
+        type: 'pie'
+    }];
+
+    var layout = {
+        title: "Wind 2019",
+        height: 400,
+        width: 400,
+        margin: {
+            l: 0,
+            r: 0,
+            b: 10,
+            t: 25,
+        },
+        legend :{
+          x:1,
+        }
+    };
+
+    Plotly.newPlot('wind19', data, layout);
+
+  });
+}
+
+function Emm1(){
+  d3.json('/emission_1').then(function(data){
+    var Sector_use = [];
+    var Percentage_use = [];
+
+    for(eric = 0; eric < data.length; eric++){
+      Sector_use.push(data[eric].UseSector)
+      Percentage_use.push(data[eric].UsePercentage)
+    }
+
+    // Populate the Pie Chart
+    var data = [{
+        values: Percentage_use, //values for data
+        labels: Sector_use,
+        type: 'pie'
+    }];
+
+    var layout = {
+        title: "Emission By Use",
+        height: 400,
+        width: 400,
+        margin: {
+            l: 0,
+            r: 0,
+            b: 10,
+            t: 25,
+        },
+        legend :{
+          x:1,
+        }
+    };
+
+    Plotly.newPlot('emission1', data, layout);
+
+  });
+}
+
+function Emm2(){
+  d3.json('/emission_2').then(function(data){
+    var Sector_use = [];
+    var Percentage_use = [];
+
+    for(eric = 0; eric < data.length; eric++){
+      Sector_use.push(data[eric].UseSector)
+      Percentage_use.push(data[eric].UsePercentage)
+    }
+
+    // Populate the Pie Chart
+    var data = [{
+        values: Percentage_use, //values for data
+        labels: Sector_use,
+        type: 'pie'
+    }];
+
+    var layout = {
+        title: "Emission By Sector",
+        height: 400,
+        width: 400,
+        margin: {
+            l: 0,
+            r: 0,
+            b: 10,
+            t: 25,
+        },
+        legend :{
+          x:1,
+        }
+    };
+
+    Plotly.newPlot('emission2', data, layout);
 
   });
 }
@@ -156,7 +300,7 @@ function con_stackedArea(selectValue) {
           }
         };
 
-        Plotly.newPlot('stacked', traces, layout);
+        Plotly.newPlot('conStack', traces, layout);
         //{ title: `Energy Consumption by Type for ${selectValue}` }
     })
 }
@@ -198,7 +342,7 @@ function gen_pieChart(selectValue) {
             }
         };
 
-        Plotly.newPlot('gen_stacked', data, layout);
+        Plotly.newPlot('genPie', data, layout);
 
     });
 }
