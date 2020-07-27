@@ -20,6 +20,10 @@ Base.prepare(engine, reflect=True)
 Consumption = Base.classes.consumption
 Generation = Base.classes.generation
 Emissions = Base.classes.emissions
+Solar = Base.classes.SolarSurge
+Wind = Base.classes.WindGrowth
+Emission_1 = Base.classes.EmissionsEndUse
+Emission_2 = Base.classes.SectorEmissions
 
 app = Flask(__name__)
 @app.route("/")
