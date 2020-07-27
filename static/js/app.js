@@ -18,45 +18,93 @@ function init() {
                 });
         });
     });
+    con_stackedArea("US-TOTAL");
     gen_pieChart("US-TOTAL");
 
 }
 d3.selectAll("#selDataset").on("change", updatePlotly);
 function updatePlotly() {
     var selectValue = d3.select("#selDataset").node().value;
+    con_stackedArea(selectValue);
     gen_pieChart(selectValue);
+}
+function con_stackedArea(selectValue) {
+    d3.json('/consumption').then(function (data) {
+        var petroleum_table = [];
+        var coal_table = [];
+        var naturalgas_table = [];
+        var engSrcUnique = [];
+        var yearTable = [];
+
+        for (l = 0; l< data.length; l++){
+          engSrcUnique.push(data[l].EnergySource);
+        }
+        var energy_source = [...new Set(engSrcUnique)];
+
+        function srcTable(source){
+          var tempTbl = [];
+          for (i = 0; i<data.length; i++){
+            if ((data[i].EnergySource == source) && (data[i].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY")
+                 && (data[i].State == selectValue)){
+                   tempTbl.push(data[i].UseOfElectricity);
+            //     rows = [];
+            //     rows.push(data[i].Year,data[i].State,data[i].UseOfElectricity);
+            //     tempTbl.push(rows);
+            }
+          }
+          return tempTbl
+        }
+        petroleum_table = srcTable(energy_source[1]);
+        coal_table = srcTable(energy_source[0]);
+        naturalgas_table = srcTable(energy_source[2]);
+
+        for (j = 0; j< data.length; j++){
+          yearTable.push(data[j].Year);
+        }
+        var years = [...new Set(yearTable)];
+
+        var traces = [
+            { x: years, y: petroleum_table, stackgroup: 'one', name: "Petroleum" },
+            { x: years, y: coal_table, stackgroup: 'one', name: "Coal" },
+            { x: years, y: naturalgas_table, stackgroup: 'one', name: "Natural Gas" }
+        ];
+
+        var layout = {
+          title: {
+            text: `Energy Consumption by Type for ${selectValue}`
+          },
+          xaxis: {
+            text : "Year"
+          },
+          yaxis: {
+            text : "Consumption"
+          }
+        };
+
+        Plotly.newPlot('stacked', traces, layout);
+        //{ title: `Energy Consumption by Type for ${selectValue}` }
+    })
 }
 
 function gen_pieChart(selectValue) {
     d3.json('/generation').then(function (data) {
 
         var pie_gen_table = [];
-        var energyUse_table = [];
-        var energySourceArray = [];
-        var rows = [];
+        var energyGen = [];
+        var energySource = [];
 
-        for (eric = 0; eric < data.length; eric++) {
-
-            if ((data[eric].Year == "2018") && (data[eric].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY") &&(data[eric].EnergySource !== "US-TOTALS")) {
-                rows = [];
-                rows.push(data[eric].State, data[eric].Generated, data[eric].EnergySource);
-                pie_gen_table.push(rows);
-            }
+        for (i = 0; i < data.length; i++){
+          if ((data[i].Year == "2018") && (data[i].TypeOfProducer == "TOTAL ELECTRIC POWER INDUSTRY") &&
+              (data[i].EnergySource !== "US-TOTALS") && data[i].State == selectValue){
+                energyGen.push(data[i].Generated);
+                energySource.push(data[i].EnergySource);
+              }
         }
-        for (o = 0; o < pie_gen_table.length; o++) {
 
-            if (pie_gen_table[o][0] == selectValue) {
-                energyUse_table.push(pie_gen_table[o][1]);
-                energySourceArray.push(pie_gen_table[o][2])
-            }
-
-
-        }
         // Populate the Pie Chart
         var data = [{
-            values: energyUse_table, //values for data
-            labels: energySourceArray,
-            //labels: energyUse_table[1],
+            values: energyGen, //values for data
+            labels: energySource,
             type: 'pie'
         }];
 
